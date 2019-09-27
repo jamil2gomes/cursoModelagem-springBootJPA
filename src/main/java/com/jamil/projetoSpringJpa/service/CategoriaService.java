@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.jamil.projetoSpringJpa.model.Categoria;
 import com.jamil.projetoSpringJpa.repository.CategoriaRepository;
+import com.jamil.projetoSpringJpa.service.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -16,7 +17,10 @@ public class CategoriaService {
 	
 	
 	public Categoria findBy(Long id) {
-		return repo.findById(id).orElse(null);
+		
+		return repo.findById(id).orElseThrow(()->new ObjectNotFoundException(""
+				+ "Objeto não encontrado! Id: " + id + 
+				", Tipo: " + Categoria.class.getName()));
 	}
 	
 	public List<Categoria>findAll(){
