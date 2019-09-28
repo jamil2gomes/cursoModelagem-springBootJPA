@@ -2,8 +2,13 @@ package com.jamil.projetoSpringJpa.model;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import com.jamil.projetoSpringJpa.model.enums.EstadoPagamento;
 
+@Entity
+@Table(name = "tb_pagamento_com_boleto")
 public class PagamentoComBoleto extends Pagamento {
 	private static final long serialVersionUID = 1L;
 	
@@ -11,7 +16,7 @@ public class PagamentoComBoleto extends Pagamento {
 	private Date dataPagamento;
 	
 	public PagamentoComBoleto() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public PagamentoComBoleto(Long id, EstadoPagamento estadoPagamento, Pedido pedido, Date dataVencimento, Date dataPagamento) {

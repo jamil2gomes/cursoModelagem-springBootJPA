@@ -1,7 +1,12 @@
 package com.jamil.projetoSpringJpa.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import com.jamil.projetoSpringJpa.model.enums.EstadoPagamento;
 
+@Entity
+@Table(name = "tb_pagamento_com_cartao")
 public class PagamentoComCartao extends Pagamento{
 	private static final long serialVersionUID = 1L;
 
