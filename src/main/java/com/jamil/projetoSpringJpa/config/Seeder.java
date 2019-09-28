@@ -1,5 +1,6 @@
 package com.jamil.projetoSpringJpa.config;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,22 @@ import com.jamil.projetoSpringJpa.model.Cidade;
 import com.jamil.projetoSpringJpa.model.Cliente;
 import com.jamil.projetoSpringJpa.model.Endereco;
 import com.jamil.projetoSpringJpa.model.Estado;
+import com.jamil.projetoSpringJpa.model.ItemPedido;
+import com.jamil.projetoSpringJpa.model.Pagamento;
+import com.jamil.projetoSpringJpa.model.PagamentoComBoleto;
+import com.jamil.projetoSpringJpa.model.PagamentoComCartao;
+import com.jamil.projetoSpringJpa.model.Pedido;
 import com.jamil.projetoSpringJpa.model.Produto;
+import com.jamil.projetoSpringJpa.model.enums.EstadoPagamento;
 import com.jamil.projetoSpringJpa.model.enums.TipoPessoa;
 import com.jamil.projetoSpringJpa.repository.CategoriaRepository;
 import com.jamil.projetoSpringJpa.repository.CidadeRepository;
 import com.jamil.projetoSpringJpa.repository.ClienteRepository;
 import com.jamil.projetoSpringJpa.repository.EnderecoRepository;
 import com.jamil.projetoSpringJpa.repository.EstadoRepository;
+import com.jamil.projetoSpringJpa.repository.ItemPedidoRepository;
+import com.jamil.projetoSpringJpa.repository.PagamentoRepository;
+import com.jamil.projetoSpringJpa.repository.PedidoRepository;
 import com.jamil.projetoSpringJpa.repository.ProdutoRepository;
 
 @Configuration
@@ -40,6 +50,15 @@ public class Seeder implements CommandLineRunner{
 	
 	@Autowired
 	private EnderecoRepository endRepo;
+	
+	@Autowired
+	private PedidoRepository pedRepo;
+	
+	@Autowired
+	private PagamentoRepository pagRepo;
+	
+	@Autowired
+	private ItemPedidoRepository ipRepo;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -89,6 +108,34 @@ public class Seeder implements CommandLineRunner{
 		
 		endRepo.saveAll(Arrays.asList(end1, end2));
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		
+		Pedido ped1 = new Pedido(null, sdf.parse("23/05/2019 10:32"), c1, end1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/09/2019 18:52"), c1, end2);
+		
+		Pagamento pag1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pag1);
+		
+		Pagamento pag2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/08/2019 00:00"), null);
+		ped2.setPagamento(pag2);
+		
+		c1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
+		pedRepo.saveAll(Arrays.asList(ped1, ped2));
+		pagRepo.saveAll(Arrays.asList(pag1, pag2));
+		
+		ItemPedido i1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido i2 = new ItemPedido(ped1, p3, 0.00, 2,80.00);
+		ItemPedido i3 = new ItemPedido(ped2, p2, 100.00, 2, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(i1, i2));
+		ped2.getItens().addAll(Arrays.asList(i3));
+		
+		p1.getItens().addAll(Arrays.asList(i1));
+		p2.getItens().addAll(Arrays.asList(i3));
+		p3.getItens().addAll(Arrays.asList(i2));
+		
+		ipRepo.saveAll(Arrays.asList(i1, i2, i3));
 	}
 	
 	
