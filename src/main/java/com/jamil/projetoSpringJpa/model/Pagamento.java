@@ -14,6 +14,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jamil.projetoSpringJpa.model.enums.EstadoPagamento;
 
 @Entity
@@ -28,6 +29,7 @@ public abstract class Pagamento implements Serializable{
 	@Enumerated(EnumType.STRING)
 	private EstadoPagamento estadoPagamento;
 	
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name = "pedido_id")
 	@MapsId
